@@ -12,16 +12,19 @@ class S3Walker(object):
         buckets = list_buckets_response['Buckets']
         for bucket in buckets:
             bucket_name = bucket['Name']
-            list_object_versions_response = self.__s3_client.list_object_versions(Bucket=bucket_name, MaxKeys=self.__batch_size)
+            get_all_versions_in_bucket(bucket_name)
+
+    def get_all_versions_in_bucket(self, bucket_name):
+        list_object_versions_response = self.__s3_client.list_object_versions(Bucket=bucket_name, MaxKeys=self.__batch_size)
+        if list_object_versions_response.has_key('Versions'):
+            for version in list_object_versions_response['Versions']:
+                yield {'bucket':bucket_name, 'version':version}
+        while list_object_versions_response['IsTruncated']:
+            list_object_versions_response = self.__s3_client.list_object_versions(
+                Bucket=bucket_name,
+                MaxKeys=self.__batch_size,
+                KeyMarker=list_object_versions_response['NextKeyMarker'],
+                VersionIdMarker=list_object_versions_response['NextVersionIdMarker'])
             if list_object_versions_response.has_key('Versions'):
                 for version in list_object_versions_response['Versions']:
                     yield {'bucket':bucket_name, 'version':version}
-            while list_object_versions_response['IsTruncated']:
-                list_object_versions_response = self.__s3_client.list_object_versions(
-                    Bucket=bucket_name,
-                    MaxKeys=self.__batch_size,
-                    KeyMarker=list_object_versions_response['NextKeyMarker'],
-                    VersionIdMarker=list_object_versions_response['NextVersionIdMarker'])
-                if list_object_versions_response.has_key('Versions'):
-                    for version in list_object_versions_response['Versions']:
-                        yield {'bucket':bucket_name, 'version':version}
