@@ -1,3 +1,18 @@
+def list_all_versions_in_bucket(bucket_name, s3_client, batch_size):
+    list_object_versions_response = s3_client.list_object_versions(Bucket=bucket_name, MaxKeys=batch_size)
+    if list_object_versions_response.has_key('Versions'):
+        yield {'bucket': bucket_name, 'version': list_object_versions_response['Versions']}
+
+    while list_object_versions_response['IsTruncated']:
+        list_object_versions_response = s3_client.list_object_versions(
+                Bucket=bucket_name,
+                MaxKeys=batch_size,
+                KeyMarker=list_object_versions_response['NextKeyMarker'],
+                VersionIdMarker=list_object_versions_response['NextVersionIdMarker'])
+        if list_object_versions_response.has_key('Versions'):
+            yield {'bucket': bucket_name, 'version': list_object_versions_response['Versions']}
+
+
 class S3Walker(object):
     def __init__(self, s3client, batch_size):
         """
