@@ -11,6 +11,6 @@ def filter_log_buckets(bucket_names):
     """
 
     log_substring = 'log'
-    filtered_bucket_names = [bucket_name for bucket_name in bucket_names if not log_substring in bucket_name]
+    filtered_bucket_names = [bucket_name for bucket_name in bucket_names if log_substring not in bucket_name]
 
     return filtered_bucket_names

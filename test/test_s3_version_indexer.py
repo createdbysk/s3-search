@@ -1,4 +1,4 @@
-import index_s3_keys
+import s3_version_indexer
 import mock
 
 
@@ -50,11 +50,11 @@ class TestIndexS3Keys(object):
         self.__elasticsearch_helpers.streaming_bulk.side_effect = return_value_generator
 
         # WHEN
-        index_s3_keys.add_versions_to_index(self.__elasticsearch_client,
-                                            versions,
-                                            chunk_size,
-                                            self.__expand_action_callback,
-                                            self.__response_handler)
+        s3_version_indexer.add_versions_to_index(self.__elasticsearch_client,
+                                                 versions,
+                                                 chunk_size,
+                                                 self.__expand_action_callback,
+                                                 self.__response_handler)
 
         # THEN
         self.__elasticsearch_helpers\

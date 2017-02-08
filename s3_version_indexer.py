@@ -1,5 +1,3 @@
-
-
 def add_versions_to_index(elasticsearch_client, versions, chunk_size, expand_action_callback, response_handler):
     """
     Add the versions to the Elasticsearch index
