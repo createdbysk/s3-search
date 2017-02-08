@@ -17,11 +17,11 @@ class TestArgumentParser(object):
 Delete specified files from s3 with a dry-run option.
 
 positional arguments:
-  index              index the s3 keys in elastic search
+  command              index - index the s3 keys in elastic search
+  profile              the aws profile to use to run the command
 
 optional arguments:
   -h, --help         show this help message and exit
-  --profile PROFILE  the aws profile to use to run the command
 """
 
         # WHEN
