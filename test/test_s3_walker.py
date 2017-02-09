@@ -45,7 +45,7 @@ class TestS3Walker(object):
                 raise NotImplementedError
 
         self.__client.list_object_versions.side_effect = side_effect
-        expected_versions = [{'version': '1', 'bucket':bucket_name}]
+        expected_versions = ['1']
 
         # When
         actual_versions = list(s3_walker.list_all_versions_in_bucket(bucket_name, self.__client, batch_size))
@@ -84,14 +84,8 @@ class TestS3Walker(object):
 
         self.__client.list_object_versions.side_effect = side_effect
         expected_versions = [
-            {
-                'version': ['1', '2'],
-                'bucket': bucket_name
-            },
-            {
-                'version': ['3'],
-                'bucket': bucket_name
-            }
+            ['1', '2'],
+            ['3']
         ]
 
         # When
